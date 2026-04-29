@@ -32,7 +32,7 @@ const scenes = {
     ]
   },
 
-    villageEntrance: {
+  villageEntrance: {
     text: "There is a sign that welcomes you to Rose Town.",
     choices: [
       { text: "Enter the village", next: "enterVillage" },
@@ -40,7 +40,7 @@ const scenes = {
     ]
   },
 
-      enterVillage: {
+  enterVillage: {
     text: "Rose Town is a small village. Since you are a new arrival, a man takes notice.",
     enemy: { name: "George", hp: 25, attack: 30 },
     choices: [
@@ -50,7 +50,7 @@ const scenes = {
     ]
   },
 
-        talkGeorge: {
+  talkGeorge: {
     text: "You must be new here. I am George the town fool. It is nice to see a new face here in Rose Town... nobody here is ever new. Not after- well, you don't need to know the details.",
     choices: [
       { text: "Ask him about the 'details'", next: "askGeorgeAboutDetails" },
@@ -60,30 +60,30 @@ const scenes = {
     ]
   },
 
-          askGeorgeForGift: {
+  askGeorgeForGift: {
     text: "What's that? You want something? Hmmm... *he digs around in his pockets*. Aha! How about this? It might help you in the future!",
     loot: ["Heart Necklace"],
     choices: [
       { text: "Ask him about the necklace", next: "askGeorgeAboutNecklace" },
-      { text: "Continue conversation", next: "talkGeorge" },
+      { text: "Continue conversation", next: "talkGeorge" }
     ]
   },
 
-        askGeorgeAboutRoseTown: {
+  askGeorgeAboutRoseTown: {
     text: "So, you want to know about Rose Town do you? Well... I can't think of much to say really. We make good beer! Depending on who you ask... that's all that matters!",
     choices: [
       { text: "Continue conversation", next: "talkGeorge" }
     ]
   },
 
-          askGeorgeAboutDetails: {
+  askGeorgeAboutDetails: {
     text: "It's not good to ask questions you wouldn't want the answer too...",
     choices: [
       { text: "Continue conversation", next: "talkGeorge" }
     ]
-  },
+  }
 
-} 
+}; // ← this closes the scenes object
 
 function renderScene() {
   const scene = scenes[currentScene];
