@@ -6,7 +6,7 @@ const items = {
 
   "Heart Necklace": {
     type: "support",
-    description: "A mysterious necklace with strange powers."
+    description: "A mysterious necklace with strange powers.",
     revive: true
   }
 };
