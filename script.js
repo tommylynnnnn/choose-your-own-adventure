@@ -153,14 +153,20 @@ renderScene();
 function startCombat(enemy) {
   const textDiv = document.getElementById("text");
   const choicesDiv = document.getElementById("choices");
+  let lastPlayerDamage = 0;
+  let lastEnemyDamage = 0;
 
-  function updateCombatText() {
-    textDiv.innerHTML = `
-      <b>Combat!</b><br><br>
-      ${enemy.name}: ${enemy.hp} HP<br>
-      You: ${player.hp}/${player.maxHp} HP
-    `;
-  }
+function updateCombatText() {
+  textDiv.innerHTML = `
+    <b>Combat!</b><br><br>
+
+    ${enemy.name}: ${enemy.hp} HP<br>
+    You: ${player.hp}/${player.maxHp} HP<br><br>
+
+    ${lastPlayerDamage > 0 ? `You dealt <b style="color:lightgreen;">${lastPlayerDamage}</b> damage!<br>` : ""}
+    ${lastEnemyDamage > 0 ? `${enemy.name} dealt <b style="color:red;">${lastEnemyDamage}</b> damage!<br>` : ""}
+  `;
+}
 
   function playerTurn() {
     updateCombatText();
@@ -170,7 +176,8 @@ function startCombat(enemy) {
     attackBtn.className = "choice";
     attackBtn.innerText = "Attack";
     attackBtn.onclick = () => {
-      enemy.hp -= getPlayerAttack();
+      lastPlayerDamage = getPlayerAttack();
+      enemy.hp -= lastPlayerDamage;
       if (enemy.hp <= 0) return winCombat(enemy);
       enemyTurn();
     };
@@ -179,7 +186,8 @@ function startCombat(enemy) {
   }
 
   function enemyTurn() {
-    player.hp -= enemy.attack;
+    lastEnemyDamage = enemy.attack;
+    player.hp -= lastEnemyDamage;
     if (player.hp <= 0) return loseCombat();
     playerTurn();
   }
