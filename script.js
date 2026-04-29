@@ -1,3 +1,16 @@
+const items = {
+  "Rusty Dagger": {
+    type: "attack",
+    attack: 2
+  },
+
+  "Heart Necklace": {
+    type: "support",
+    description: "A mysterious necklace with strange powers."
+    revive: true
+  }
+};
+
 const player = {
   hp: 20,
   maxHp: 20,
@@ -208,14 +221,49 @@ function renderInventory() {
     counts[item] = (counts[item] || 0) + 1;
   });
 
-  // Build display text
   let html = "<b>Inventory:</b><br>";
-  for (let item in counts) {
-    const amount = counts[item];
-    html += `${item}${amount > 1 ? " x" + amount : ""}<br>`;
+
+  for (let itemName in counts) {
+    const itemData = items[itemName];
+    const amount = counts[itemName];
+
+    html += `${itemName}`;
+
+    // stack count
+    if (amount > 1) html += ` x${amount}`;
+
+    // show type
+    if (itemData) {
+      html += ` <span style="color:gray;">(${itemData.type})</span>`;
+    }
+
+    html += "<br>";
   }
 
   invDiv.innerHTML = html;
+}
+
+function useItem(itemName) {
+  const item = items[itemName];
+
+  if (!item) return;
+
+  if (item.type === "support") {
+    if (item.heal) {
+      player.hp = Math.min(player.maxHp, player.hp + item.heal);
+    }
+
+    if (item.revive && player.hp <= 0) {
+      player.hp = player.maxHp / 2;
+    }
+
+    // remove one from inventory
+    const index = player.inventory.indexOf(itemName);
+    if (index !== -1) player.inventory.splice(index, 1);
+
+    renderInventory();
+    renderScene();
+  }
 }
 
 renderInventory();
