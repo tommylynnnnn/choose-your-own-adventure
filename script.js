@@ -9,9 +9,9 @@ let currentScene = "start";
 
 const scenes = {
   start: {
-    text: "You awaken in a dark forest. The wind is cold. A path leads north.",
+    text: "You are in a dark forest. The only thing you see is a path that leads north.",
     choices: [
-      { text: "Go north", next: "wolfEncounter" },
+      { text: "Follow the path", next: "pathWalk" },
       { text: "Search the ground", next: "findDagger" }
     ]
   },
@@ -24,30 +24,64 @@ const scenes = {
     ]
   },
 
-  wolfEncounter: {
-    text: "A hungry wolf blocks your path, growling.",
-    enemy: { name: "Wolf", hp: 10, attack: 3 },
+  pathWalk: {
+    text: "You walk along the path. There is a fork in the road. Where do you go?",
     choices: [
-      { text: "Fight", combat: true },
-      { text: "Run back", next: "start" }
+      { text: "Go left", next: "villageEntrance" },
+      { text: "Go right", next: "encounterBridge" }
     ]
   },
 
-  afterWolf: {
-    text: "The wolf lies defeated. The path ahead is clear.",
-    loot: ["Wolf Pelt"],
+    villageEntrance: {
+    text: "There is a sign that welcomes you to Rose Town.",
     choices: [
-      { text: "Continue north", next: "clearing" }
+      { text: "Enter the village", next: "enterVillage" },
+      { text: "Go back", next: "pathWalk" }
     ]
   },
 
-  clearing: {
-    text: "You reach a quiet clearing with sunlight filtering through the trees.",
+      enterVillage: {
+    text: "Rose Town is a small village. Since you are a new arrival, a man takes notice.",
+    enemy: { name: "George", hp: 25, attack: 30 },
     choices: [
-      { text: "The adventure continues...", next: "clearing" }
+      { text: "Talk to the man", next: "talkGeorge" },
+      { text: "Attack him", combat: true },
+      { text: "Go back", next: "villageEntrance" }
     ]
-  }
-};
+  },
+
+        talkGeorge: {
+    text: "You must be new here. I am George the town fool. It is nice to see a new face here in Rose Town... nobody here is ever new. Not after- well, you don't need to know the details.",
+    choices: [
+      { text: "Ask him about the 'details'", next: "askGeorgeAboutDetails" },
+      { text: "Ask him about Rose Town", next: "askGeorgeAboutRoseTown" },
+      { text: "Ask him for a special object", next: "askGeorgeForGift" },
+      { text: "Go back", next: "enterVillage" }
+    ]
+  },
+
+          askGeorgeForGift: {
+    text: "What's that? You want something? Hmmm... *he digs around in his pockets*. Aha! How about this? It might help you in the future!",
+    loot: ["Heart Necklace"],
+    choices: [
+      { text: "Ask him about the necklace", next: "askGeorgeAboutNecklace" },
+      { text: "Continue conversation", next: "talkGeorge" },
+    ]
+  },
+
+        askGeorgeAboutRoseTown: {
+    text: "So, you want to know about Rose Town do you? Well... I can't think of much to say really. We make good beer! Depending on who you ask... that's all that matters!",
+    choices: [
+      { text: "Continue conversation", next: "talkGeorge" }
+    ]
+  },
+
+          askGeorgeAboutDetails: {
+    text: "It's not good to ask questions you wouldn't want the answer too...",
+    choices: [
+      { text: "Continue conversation", next: "talkGeorge" }
+    ]
+  },
 
 function renderScene() {
   const scene = scenes[currentScene];
