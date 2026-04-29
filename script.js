@@ -15,6 +15,7 @@ const player = {
   hp: 20,
   maxHp: 20,
   attack: 4,
+  money: 3,
   inventory: []
 };
 
@@ -121,14 +122,14 @@ const scenes = {
     text: "The well is made of stone... it looks old and dark.",
     choices: [
       { text: "Jump in", next: "jumpWellCheck" },
-      { text: "Throw in a coin", next: "coinWell" },
+      { text: "Throw in a coin", next: "coinWellCheck" },
       { text: "Sing into the well", next: "singWell" },
       { text: "Go back", next: "exploreRoseTown" }
     ]
   },
 
       jumpWellCheck: {
-  check: () => player.hp >= 15,
+  check: () => player.hp >= 30,
   success: "jumpWellSurvive",
   fail: "jumpWellDie"
 },
@@ -143,8 +144,41 @@ const scenes = {
 jumpWellDie: {
   text: "You hit the ground with a sickening crack. You did not survive the fall.",
   choices: []
-}
+},
 
+        coinWellCheck: {
+  check: () => player.money >= 30,
+  success: "coinWellSuccess",
+  fail: "coinWellFail"
+},
+
+    counWellSuccess: {
+  text: "You toss one of your coins into the well. You feel a little more lucky than before.",
+  choices: [
+    { text: "Go back", next: "goWell" }
+  ]
+},
+
+  coinWellFail: {
+  text: "You can't afford to spare a single coin.",
+  choices: [
+    { text: "Go back", next: "goWell" }
+  ]
+},
+
+        singWell: {
+    text: "You sing into the well. You feel like a pretty princess.",
+    choices: [
+      { text: "Go back", next: "goWell" },
+    ]
+  },
+
+          wellBottom: {
+    text: "The bottom of the well is wet and sticky. Likely filled with the sewage of villagers past and present.",
+    choices: [
+      { text: "Go back", next: "goWell" },
+    ]
+  },
 
 }; // ← this closes the scenes object
 
