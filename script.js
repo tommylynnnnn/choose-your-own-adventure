@@ -28,7 +28,8 @@ const scenes = {
     text: "You walk along the path. There is a fork in the road. Where do you go?",
     choices: [
       { text: "Go left", next: "villageEntrance" },
-      { text: "Go right", next: "encounterBridge" }
+      { text: "Go right", next: "encounterBridge" },
+      { text: "Go back", next: "start" }
     ]
   },
 
@@ -78,6 +79,13 @@ const scenes = {
 
   askGeorgeAboutDetails: {
     text: "It's not good to ask questions you wouldn't want the answer too...",
+    choices: [
+      { text: "Continue conversation", next: "talkGeorge" }
+    ]
+  },
+
+  askGeorgeAboutNecklace: {
+    text: "Legends say this necklace is supposed to revive you if you die... but only once! I got it at a travelling merchant, he told me that. Who wouldn't trust travelling salesmen?",
     choices: [
       { text: "Continue conversation", next: "talkGeorge" }
     ]
