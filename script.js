@@ -60,6 +60,7 @@ const scenes = {
     choices: [
       { text: "Talk to the man", next: "talkGeorge" },
       { text: "Attack him", combat: true },
+      { text: "Ignore him and explore the village", next: "exploreRoseTown" },
       { text: "Go back", next: "villageEntrance" }
     ]
   },
@@ -102,12 +103,57 @@ const scenes = {
     choices: [
       { text: "Continue conversation", next: "talkGeorge" }
     ]
-  }
+  },
+
+    exploreRoseTown: {
+    text: "In the central plaza of Rose Town, you see 5 buildings. Which shall you explore?",
+    choices: [
+      { text: "Check out the well", next: "goWell" },
+      { text: "Check out the tavern", next: "goTavern" },
+      { text: "Check out the village hall", next: "goTownHall" },
+      { text: "Check out the farm", next: "goFarm" },
+      { text: "Check out the Museum", next: "goMuseum" },
+      { text: "Go back", next: "villageEntrance" }
+    ]
+  },
+
+      goWell: {
+    text: "The well is made of stone... it looks old and dark.",
+    choices: [
+      { text: "Jump in", next: "jumpWellCheck" },
+      { text: "Throw in a coin", next: "coinWell" },
+      { text: "Sing into the well", next: "singWell" },
+      { text: "Go back", next: "exploreRoseTown" }
+    ]
+  },
+
+      jumpWellCheck: {
+  check: () => player.hp >= 15,
+  success: "jumpWellSurvive",
+  fail: "jumpWellDie"
+},
+
+  jumpWellSurvive: {
+  text: "You land hard, but survive the fall.",
+  choices: [
+    { text: "Explore the bottom", next: "wellBottom" }
+  ]
+},
+
+jumpWellDie: {
+  text: "You hit the ground with a sickening crack. You did not survive the fall.",
+  choices: []
+}
+
 
 }; // ← this closes the scenes object
 
 function renderScene() {
   const scene = scenes[currentScene];
+    if (scene.check) {
+  currentScene = scene.check() ? scene.success : scene.fail;
+  return renderScene();
+}
   const textDiv = document.getElementById("text");
   const choicesDiv = document.getElementById("choices");
 
