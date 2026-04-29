@@ -184,6 +184,49 @@ function startCombat(enemy) {
     playerTurn();
   }
 
+  function winCombat(enemy) {
+    enemy.defeated = true;
+    textDiv.innerHTML = `You defeated the ${enemy.name}!`;
+    choicesDiv.innerHTML = "";
+
+    const cont = document.createElement("div");
+    cont.className = "choice";
+    cont.innerText = "Continue";
+    cont.onclick = () => {
+      currentScene = "afterWolf";
+      renderScene();
+    };
+    choicesDiv.appendChild(cont);
+  }
+
+  function loseCombat() {
+    if (player.inventory.includes("Heart Necklace")) {
+      const index = player.inventory.indexOf("Heart Necklace");
+      player.inventory.splice(index, 1);
+
+      player.hp = Math.floor(player.maxHp / 2);
+
+      renderInventory();
+
+      textDiv.innerHTML = "The Heart Necklace glows... you are revived!";
+      choicesDiv.innerHTML = "";
+
+      const cont = document.createElement("div");
+      cont.className = "choice";
+      cont.innerText = "Continue";
+      cont.onclick = () => playerTurn();
+      choicesDiv.appendChild(cont);
+
+      return;
+    }
+
+    textDiv.innerHTML = "You have fallen in battle.";
+    choicesDiv.innerHTML = "";
+  }
+
+  playerTurn();
+} // ← THIS WAS MISSING
+
 function loseCombat() {
   // Check for revive item
   if (player.inventory.includes("Heart Necklace")) {
