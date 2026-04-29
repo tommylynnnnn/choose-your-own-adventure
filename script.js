@@ -83,6 +83,8 @@ const scenes = {
     ]
   },
 
+} 
+
 function renderScene() {
   const scene = scenes[currentScene];
   const textDiv = document.getElementById("text");
