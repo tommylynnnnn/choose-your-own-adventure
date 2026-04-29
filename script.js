@@ -18,6 +18,11 @@ const items = {
   "Iron Sword": {
   type: "attack",
   attack: 10
+},
+
+  "Beer": {
+  type: "general",
+  description: "A refreshing drink."
 }
 
 };
@@ -29,6 +34,10 @@ const player = {
   money: 3,
   inventory: []
 };
+
+function countItem(itemName) {
+  return player.inventory.filter(i => i === itemName).length;
+}
 
 let currentScene = "start";
 
@@ -166,7 +175,8 @@ jumpWellDie: {
 },
 
 coinWellCheck: {
-  check: () => player.inventory.includes("Gold Coin"),
+  check: () => countItem("Gold Coin") >= 1,
+  remove: { item: "Gold Coin", amount: 1 },
   success: "coinWellSuccess",
   fail: "coinWellFail"
 },
@@ -221,7 +231,8 @@ coinWellCheck: {
     choices: [
       { text: "Ask him what he's doing", next: "askJohnSmith" },
       { text: "Ask him if he has anything special", next: "askJohnSmithForSomething" },
-      { text: "Go back", next: "goTavern" },
+      { text: "Attack him", combat: true },
+      { text: "Go back", next: "goTavern" }
     ]
   },
 
@@ -238,19 +249,62 @@ coinWellCheck: {
       { text: "Go back", next: "goTavern" }
     ]
   },
+
+          goInsideTavern: {
+    text: "You enter the tavern. It is bustling with people which was strange because it was only mid-day.",
+    choices: [
+      { text: "Go to the bar", next: "goBar" },
+      { text: "Look around at the people", next: "lookAtPeople" },
+      { text: "Go back", next: "goTavern" }
+    ]
+  },
+
+         goBar: {
+    text: "Working at the bar is a scrawny and oily looking man. He asks you what you want.",
+    choices: [
+      { text: "Order a beer for 5 coins", next: "coinBeerCheck" },
+      { text: "Go back", next: "goInsideTavern" }
+    ]
+  },
+
+  coinBeerCheck: {
+  check: () => countItem("Gold Coin") >= 5,
+  remove: { item: "Gold Coin", amount: 5 },
+  success: "coinBeerSuccess",
+  fail: "coinBeerFail"
+},
+
+    coinBeerSuccess: {
+  text: "The man hands you a nice cold beer, matching with a red straw.",
+  loot: ["Beer"],
+  choices: [
+    { text: "Go back", next: "goBar" }
+  ]
+},
+
+    coinBeerFail: {
+  text: "You can't afford to buy a beer.",
+  choices: [
+    { text: "Go back", next: "goBar" }
+  ]
+},
+
   
 }; // ← this closes the scenes object
 
 function renderScene() {
   const scene = scenes[currentScene];
-  if (scene.check) {
+if (scene.check) {
   const passed = scene.check();
 
   if (passed) {
-    // If the scene requires removing an item, do it here
-    if (currentScene === "coinWellCheck") {
-      const index = player.inventory.indexOf("Gold Coin");
-      if (index !== -1) player.inventory.splice(index, 1);
+    // If the scene has a "remove" rule, apply it
+    if (scene.remove) {
+      const { item, amount } = scene.remove;
+      for (let i = 0; i < amount; i++) {
+        const index = player.inventory.indexOf(item);
+        if (index !== -1) player.inventory.splice(index, 1);
+      }
       renderInventory();
     }
 
