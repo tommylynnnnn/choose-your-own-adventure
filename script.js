@@ -108,6 +108,7 @@ function renderScene() {
       textDiv.innerHTML += `<br><br>You obtained: <b>${item}</b>`;
     });
     scene.loot = null; // prevent duplicate looting
+    renderInventory();
   }
 
   // Enemy handling
@@ -192,3 +193,29 @@ function startCombat(enemy) {
 
   playerTurn();
 }
+
+function renderInventory() {
+  const invDiv = document.getElementById("inventory");
+
+  if (player.inventory.length === 0) {
+    invDiv.innerHTML = "<b>Inventory:</b> (empty)";
+    return;
+  }
+
+  // Count duplicates
+  const counts = {};
+  player.inventory.forEach(item => {
+    counts[item] = (counts[item] || 0) + 1;
+  });
+
+  // Build display text
+  let html = "<b>Inventory:</b><br>";
+  for (let item in counts) {
+    const amount = counts[item];
+    html += `${item}${amount > 1 ? " x" + amount : ""}<br>`;
+  }
+
+  invDiv.innerHTML = html;
+}
+
+renderInventory();
