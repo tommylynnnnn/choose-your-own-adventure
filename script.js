@@ -13,6 +13,11 @@ const items = {
   "Gold Coin": {
   type: "general",
   description: "A shiny gold coin."
+},
+
+  "Iron Sword": {
+  type: "attack",
+  attack: 10
 }
 
 };
@@ -205,6 +210,15 @@ coinWellCheck: {
 
           talkToSmith: {
     text: "*The man takes off his hat to greet you* Hello, my name's John Smith. What can I do for you?",
+        enemy: { 
+  name: "John Smith", 
+  hp: 25, 
+  attack: 30,
+  loot: [
+  { item: "Gold Coin", chance: 1.0 },     // 100% drop
+  { item: "Iron Sword", chance: 0.25 }  // 25% drop
+]
+},
     choices: [
       { text: "Ask him what he's doing", next: "askJohnSmith" },
       { text: "Ask him if he has anything special", next: "askJohnSmithForSomething" },
@@ -214,30 +228,14 @@ coinWellCheck: {
 
           askJohnSmith: {
     text: "Oh, you know... just thinking.",
-      name: "George", 
-  hp: 25, 
-  attack: 30,
-  loot: [
-  { item: "Gold Coin", chance: 1.0 },     // 100% drop
-  { item: "Rusty Dagger", chance: 0.25 }  // 25% drop
-],
     choices: [
-      { text: "Attack him", combat: true },
       { text: "Go back", next: "goTavern" }
     ]
   },
-
+      
           askJohnSmithForSomething: {
     text: "Hell no, fuck off kid.",
-      name: "George", 
-  hp: 25, 
-  attack: 30,
-  loot: [
-  { item: "Gold Coin", chance: 1.0 },     // 100% drop
-  { item: "Rusty Dagger", chance: 0.25 }  // 25% drop
-],
     choices: [
-      { text: "Attack him", combat: true },
       { text: "Go back", next: "goTavern" }
     ]
   },
