@@ -8,7 +8,13 @@ const items = {
     type: "support",
     description: "A mysterious necklace with strange powers.",
     revive: true
-  }
+  },
+
+  "Gold Coin": {
+  type: "general",
+  description: "A shiny gold coin."
+}
+
 };
 
 const player = {
@@ -57,7 +63,15 @@ const scenes = {
 
   enterVillage: {
     text: "Rose Town is a small village. Since you are a new arrival, a man takes notice.",
-    enemy: { name: "George", hp: 25, attack: 30 },
+    enemy: { 
+  name: "George", 
+  hp: 25, 
+  attack: 30,
+  loot: [
+  { item: "Gold Coin", chance: 1.0 },     // 100% drop
+  { item: "Rusty Dagger", chance: 0.25 }  // 25% drop
+]
+},
     choices: [
       { text: "Talk to the man", next: "talkGeorge" },
       { text: "Attack him", combat: true },
@@ -129,7 +143,7 @@ const scenes = {
   },
 
       jumpWellCheck: {
-  check: () => player.hp >= 30,
+  check: () => player.hp >= 1,
   success: "jumpWellSurvive",
   fail: "jumpWellDie"
 },
@@ -146,13 +160,13 @@ jumpWellDie: {
   choices: []
 },
 
-        coinWellCheck: {
-  check: () => player.money >= 30,
+coinWellCheck: {
+  check: () => player.inventory.includes("Gold Coin"),
   success: "coinWellSuccess",
   fail: "coinWellFail"
 },
 
-    counWellSuccess: {
+    coinWellSuccess: {
   text: "You toss one of your coins into the well. You feel a little more lucky than before.",
   choices: [
     { text: "Go back", next: "goWell" }
@@ -176,16 +190,78 @@ jumpWellDie: {
           wellBottom: {
     text: "The bottom of the well is wet and sticky. Likely filled with the sewage of villagers past and present.",
     choices: [
-      { text: "Go back", next: "goWell" },
+      { text: "Go back", next: "goWell" }
     ]
   },
 
+          goTavern: {
+    text: "The tavern is called 'The Ruby Rose'. It looks like a man is standing outside of it.",
+    choices: [
+      { text: "Go inside", next: "goInsideTavern" },
+      { text: "Talk to the man", next: "talkToSmith" },
+      { text: "Go back", next: "exploreRoseTown" }
+    ]
+  },
+
+          talkToSmith: {
+    text: "*The man takes off his hat to greet you* Hello, my name's John Smith. What can I do for you?",
+    choices: [
+      { text: "Ask him what he's doing", next: "askJohnSmith" },
+      { text: "Ask him if he has anything special", next: "askJohnSmithForSomething" },
+      { text: "Go back", next: "goTavern" },
+    ]
+  },
+
+          askJohnSmith: {
+    text: "Oh, you know... just thinking.",
+      name: "George", 
+  hp: 25, 
+  attack: 30,
+  loot: [
+  { item: "Gold Coin", chance: 1.0 },     // 100% drop
+  { item: "Rusty Dagger", chance: 0.25 }  // 25% drop
+],
+    choices: [
+      { text: "Attack him", combat: true },
+      { text: "Go back", next: "goTavern" }
+    ]
+  },
+
+          askJohnSmithForSomething: {
+    text: "Hell no, fuck off kid.",
+      name: "George", 
+  hp: 25, 
+  attack: 30,
+  loot: [
+  { item: "Gold Coin", chance: 1.0 },     // 100% drop
+  { item: "Rusty Dagger", chance: 0.25 }  // 25% drop
+],
+    choices: [
+      { text: "Attack him", combat: true },
+      { text: "Go back", next: "goTavern" }
+    ]
+  },
+  
 }; // ← this closes the scenes object
 
 function renderScene() {
   const scene = scenes[currentScene];
-    if (scene.check) {
-  currentScene = scene.check() ? scene.success : scene.fail;
+  if (scene.check) {
+  const passed = scene.check();
+
+  if (passed) {
+    // If the scene requires removing an item, do it here
+    if (currentScene === "coinWellCheck") {
+      const index = player.inventory.indexOf("Gold Coin");
+      if (index !== -1) player.inventory.splice(index, 1);
+      renderInventory();
+    }
+
+    currentScene = scene.success;
+  } else {
+    currentScene = scene.fail;
+  }
+
   return renderScene();
 }
   const textDiv = document.getElementById("text");
