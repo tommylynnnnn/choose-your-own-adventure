@@ -170,7 +170,7 @@ function startCombat(enemy) {
     attackBtn.className = "choice";
     attackBtn.innerText = "Attack";
     attackBtn.onclick = () => {
-      enemy.hp -= player.attack;
+      enemy.hp -= getPlayerAttack();
       if (enemy.hp <= 0) return winCombat(enemy);
       enemyTurn();
     };
@@ -184,29 +184,35 @@ function startCombat(enemy) {
     playerTurn();
   }
 
-  function winCombat(enemy) {
-    enemy.defeated = true;
-    textDiv.innerHTML = `You defeated the ${enemy.name}!`;
+function loseCombat() {
+  // Check for revive item
+  if (player.inventory.includes("Heart Necklace")) {
+    // Remove ONE necklace
+    const index = player.inventory.indexOf("Heart Necklace");
+    player.inventory.splice(index, 1);
+
+    // Revive player
+    player.hp = Math.floor(player.maxHp / 2);
+
+    renderInventory();
+
+    textDiv.innerHTML = "The Heart Necklace glows... you are revived!";
     choicesDiv.innerHTML = "";
 
     const cont = document.createElement("div");
     cont.className = "choice";
     cont.innerText = "Continue";
-    cont.onclick = () => {
-      currentScene = "afterWolf";
-      renderScene();
-    };
+    cont.onclick = () => playerTurn();
     choicesDiv.appendChild(cont);
+
+    return;
   }
 
-  function loseCombat() {
-    textDiv.innerHTML = "You have fallen in battle.";
-    choicesDiv.innerHTML = "";
-  }
-
-  playerTurn();
+  // No revive item → real death
+  textDiv.innerHTML = "You have fallen in battle.";
+  choicesDiv.innerHTML = "";
 }
-
+  
 function renderInventory() {
   const invDiv = document.getElementById("inventory");
 
@@ -264,6 +270,19 @@ function useItem(itemName) {
     renderInventory();
     renderScene();
   }
+}
+
+function getPlayerAttack() {
+  let total = player.attack;
+
+  player.inventory.forEach(itemName => {
+    const item = items[itemName];
+    if (item && item.type === "attack" && item.attack) {
+      total += item.attack;
+    }
+  });
+
+  return total;
 }
 
 renderInventory();
