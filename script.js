@@ -215,8 +215,7 @@ coinWellCheck: {
   hp: 25, 
   attack: 30,
   loot: [
-  { item: "Gold Coin", chance: 1.0 },     // 100% drop
-  { item: "Iron Sword", chance: 0.25 }  // 25% drop
+  { item: "Gold Coin", amount: 10 }
 ]
 },
     choices: [
@@ -348,6 +347,9 @@ function updateCombatText() {
 
   function winCombat(enemy) {
     enemy.defeated = true;
+
+    giveEnemyLoot(enemy);
+
     textDiv.innerHTML = `You defeated the ${enemy.name}!`;
     choicesDiv.innerHTML = "";
 
@@ -452,6 +454,34 @@ function renderInventory() {
   }
 
   invDiv.innerHTML = html;
+}
+
+function giveEnemyLoot(enemy) {
+  if (!enemy.loot) return;
+
+  enemy.loot.forEach(drop => {
+
+    // Simple string loot: ["Gold Coin", "Rusty Dagger"]
+    if (typeof drop === "string") {
+      player.inventory.push(drop);
+      return;
+    }
+
+    // Quantity-based loot: { item: "Gold Coin", amount: 10 }
+    if (drop.amount) {
+      for (let i = 0; i < drop.amount; i++) {
+        player.inventory.push(drop.item);
+      }
+      return;
+    }
+
+    // Chance-based loot: { item: "Rusty Dagger", chance: 0.25 }
+    if (drop.chance && Math.random() < drop.chance) {
+      player.inventory.push(drop.item);
+    }
+  });
+
+  renderInventory();
 }
 
 function useItem(itemName) {
