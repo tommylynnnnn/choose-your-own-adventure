@@ -40,6 +40,11 @@ const items = {
   attack: 8
 },
 
+  "Pin of Shame (Rose Town)": {
+  type: "general",
+  description: "Shame on you! Rose Town looks down on you!"
+},
+
 };
 
 const player = {
@@ -94,11 +99,11 @@ const scenes = {
     text: "Rose Town is a small village. Since you are a new arrival, a man takes notice.",
     enemy: { 
   name: "George", 
-  hp: 25, 
-  attack: 30,
+  hp: 20, 
+  attack: 10,
+  returnTo: "enterVillage",
   loot: [
-  { item: "Gold Coin", chance: 1.0 },     // 100% drop
-  { item: "Rusty Dagger", chance: 0.25 }  // 25% drop
+  { item: "Pin of Shame (Rose Town)", amount: 1 }
 ]
 },
     choices: [
@@ -238,9 +243,10 @@ coinWellCheck: {
         enemy: { 
   name: "John Smith", 
   hp: 25, 
-  attack: 30,
+  attack: 15,
+  returnTo: "goTavern",
   loot: [
-  { item: "Gold Coin", amount: 10 }
+  { item: "Pin of Shame (Rose Town)", amount: 1 }
 ]
 },
     choices: [
@@ -277,11 +283,17 @@ coinWellCheck: {
          goBar: {
     text: "Working at the bar is a scrawny and oily looking man. He asks you what you want.",
     choices: [
-      { text: "Order a beer for 5 coins", next: "coinBeerCheck" },
+      { text: "Order a beer for 5 coins", next: "pinOfShameRoseTownCheck" },
       { text: "Go back", next: "goInsideTavern" }
     ]
   },
 
+  pinOfShameRoseTownCheck: {
+  check: () => countItem("Pin of Shame (Rose Town)") >= 1,
+  success: "coinBeerCheck",
+  fail: "coinBeerCheckFail"
+},
+  
   coinBeerCheck: {
   check: () => countItem("Gold Coin") >= 5,
   remove: { item: "Gold Coin", amount: 5 },
@@ -289,6 +301,13 @@ coinWellCheck: {
   fail: "coinBeerFail"
 },
 
+  coinBeerCheckFail: {
+  text: "We don't serve MURDERERS around here...",
+  choices: [
+    { text: "Go back", next: "goBar" }
+  ]
+},
+  
     coinBeerSuccess: {
   text: "The man hands you a nice cold beer, matching with a red straw.",
   loot: ["Beer"],
