@@ -33,8 +33,6 @@ const player = {
   attack: 4,
   money: 3,
   inventory: [],
-  currentQuest: null,
-  questProgress: {}
 };
 
 function countItem(itemName) {
@@ -333,38 +331,16 @@ coinWellCheck: {
 
         acceptChickenEaterQuest: {
     text: "Good, I knew you would accept.",
-    onEnter: () => {
-    player.currentQuest = {
-    id: "kill5ChickenEaters",
-    title: "Chicken Chaos",
-    description: "Kill 5 Chicken Eaters at Johans Farm in Rose Town.",
-    goal: 5,
-    completeScene: "chickenEaterComplete"
-};
-
-      player.questProgress["kill5ChickenEaters"] = 0;
-},
     choices: [
       { text: "Go back", next: "lookAtPeople" }
     ]
   },
-
-  "chickenEaterComplete": {
-  text: "Viktor smirks as you return to the Red Rose. He knew he could've counted on you",
-  onEnter: () => {
-    player.currentQuest = null;
-  },
-  choices: [
-    { text: "Go back", next: "lookAtPeople" }
-  ]
-}
 
   
 }; // ← this closes the scenes object
 
 function renderScene() {
   const scene = scenes[currentScene];
-  if (scene.onEnter) scene.onEnter();
 if (scene.check) {
   const passed = scene.check();
 
@@ -400,7 +376,6 @@ if (scene.check) {
     });
     scene.loot = null; // prevent duplicate looting
     renderInventory();
-    renderQuestLog();
   }
 
   // Enemy handling
@@ -592,30 +567,6 @@ function renderInventory() {
   }
 
   invDiv.innerHTML = html;
-}
-
-function renderQuestLog() {
-  const questDiv = document.getElementById("questLog");
-
-  if (!player.currentQuest) {
-    questDiv.innerHTML = "<b>Quest:</b> (none)";
-    return;
-  }
-
-let progressText = "";
-
-if (player.currentQuest.goal) {
-  const id = player.currentQuest.id;
-  const progress = player.questProgress[id] || 0;
-  progressText = `<br><b>Progress:</b> ${progress}/${player.currentQuest.goal}`;
-}
-
-questDiv.innerHTML = `
-  <b>Quest:</b><br>
-  ${player.currentQuest.title}<br>
-  <span style="color:gray;">${player.currentQuest.description}</span>
-  ${progressText}
-`;
 }
 
 function giveEnemyLoot(enemy) {
