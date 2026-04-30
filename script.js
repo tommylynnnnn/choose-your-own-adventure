@@ -95,8 +95,8 @@ const scenes = {
   },
 
     searchPathGround: {
-    text: "You find a sathel of shiny gold coins! Don't spend them all in one place!",
-    loot: ["Gold Coin", amount: 5],
+    text: "You find a satchhel of shiny gold coins! Don't spend them all in one place!",
+    loot: ["Gold Coin", "Gold Coin", "Gold Coin", "Gold Coins", "Gold Coin"],
     choices: [
       { text: "Go back", next: "pathWalk" }
     ]
