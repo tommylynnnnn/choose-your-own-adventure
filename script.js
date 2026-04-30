@@ -40,10 +40,16 @@ const items = {
   attack: 8
 },
 
-  "Pin of Shame (Rose Town)": {
+  "Pin of Shame (George)": {
   type: "general",
   description: "Shame on you! Rose Town looks down on you!"
 },
+
+  "Pin of Shame (John Smith)": {
+  type: "general",
+  description: "Shame on you! Rose Town looks down on you!"
+},
+
 
 };
 
@@ -90,10 +96,16 @@ const scenes = {
   villageEntrance: {
     text: "There is a sign that welcomes you to Rose Town.",
     choices: [
-      { text: "Enter the village", next: "enterVillage" },
+      { text: "Enter the village", next: "enterVillageCheck" },
       { text: "Go back", next: "pathWalk" }
     ]
   },
+
+  enterVillageCheck: {
+  check: () => countItem("Pin of Shame (Rose Town)") >= 1,
+  success: "exploreRoseTown",
+  fail: "enterVillage"
+},
 
   enterVillage: {
     text: "Rose Town is a small village. Since you are a new arrival, a man takes notice.",
@@ -101,9 +113,9 @@ const scenes = {
   name: "George", 
   hp: 20, 
   attack: 10,
-  returnTo: "enterVillage",
+  returnTo: "exploreRoseTown",
   loot: [
-  { item: "Pin of Shame (Rose Town)", amount: 1 }
+  { item: "Pin of Shame (George)", amount: 1 }
 ]
 },
     choices: [
@@ -158,7 +170,7 @@ const scenes = {
     text: "In the central plaza of Rose Town, you see 5 buildings. Which shall you explore?",
     choices: [
       { text: "Check out the well", next: "goWell" },
-      { text: "Check out the tavern", next: "goTavern" },
+      { text: "Check out the tavern", next: "goTavernCheck" },
       { text: "Check out the village hall", next: "goTownHall" },
       { text: "Check out the farm", next: "goFarm" },
       { text: "Check out the Museum", next: "goMuseum" },
@@ -229,6 +241,12 @@ coinWellCheck: {
     ]
   },
 
+    goTavernCheck: {
+  check: () => countItem("Pin of Shame (John Smith)") >= 1,
+  success: "goInsideTavern",
+  fail: "goTavern"
+},
+  
           goTavern: {
     text: "The tavern is called 'The Ruby Rose'. It looks like a man is standing outside of it.",
     choices: [
@@ -244,9 +262,9 @@ coinWellCheck: {
   name: "John Smith", 
   hp: 25, 
   attack: 15,
-  returnTo: "goTavern",
+  returnTo: "exploreRoseTown",
   loot: [
-  { item: "Pin of Shame (Rose Town)", amount: 1 }
+  { item: "Pin of Shame (John Smith)", amount: 1 }
 ]
 },
     choices: [
