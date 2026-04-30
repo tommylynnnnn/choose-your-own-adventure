@@ -431,7 +431,7 @@ coinWellCheck: {
   name: "Chicken Eater", 
   hp: 16, 
   attack: 5,
-  returnTo: "forestPath",
+  returnTo: "goFarm",
   loot: [
   { item: "Chicken Eater Head", amount: 1 }
 ]
