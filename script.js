@@ -431,6 +431,7 @@ coinWellCheck: {
   name: "Chicken Eater", 
   hp: 16, 
   attack: 5,
+  returnTo: "forestPath",
   loot: [
   { item: "Chicken Eater Head", amount: 1 }
 ]
@@ -553,18 +554,6 @@ function updateCombatText() {
 
   function winCombat(enemy) {
     enemy.defeated = true;
-// Quest kill tracking
-if (player.currentQuest && enemy.questTag === player.currentQuest.id) {
-  const id = player.currentQuest.id;
-  player.questProgress[id]++;
-
-  if (player.questProgress[id] >= player.currentQuest.goal) {
-    const finish = player.currentQuest.completeScene;
-    currentScene = finish;
-    return renderScene();
-  }
-}
-
 
     giveEnemyLoot(enemy);
 
@@ -575,9 +564,9 @@ if (player.currentQuest && enemy.questTag === player.currentQuest.id) {
     cont.className = "choice";
     cont.innerText = "Continue";
     cont.onclick = () => {
-      currentScene = "afterWolf";
-      renderScene();
-    };
+  currentScene = enemy.returnTo;
+  renderScene();
+};
     choicesDiv.appendChild(cont);
   }
 
