@@ -113,7 +113,7 @@ const scenes = {
   name: "George", 
   hp: 20, 
   attack: 10,
-  returnTo: "exploreRoseTown",
+  returnTo: "villageEntrance",
   loot: [
   { item: "Pin of Shame (George)", amount: 1 }
 ]
@@ -141,7 +141,7 @@ const scenes = {
     loot: ["Heart Necklace"],
     choices: [
       { text: "Ask him about the necklace", next: "askGeorgeAboutNecklace" },
-      { text: "Continue conversation", next: "talkGeorge" }
+      { text: "Go back", next: "talkGeorge" }
     ]
   },
 
