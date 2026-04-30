@@ -35,6 +35,11 @@ const items = {
   description: "Disgusting and smells like feces."
 },
 
+  "Training Sword": {
+  type: "attack",
+  attack: 8
+},
+
 };
 
 const player = {
@@ -303,7 +308,7 @@ coinWellCheck: {
     text: "You see a man sitting in the corner. What do you do?",
     choices: [
       { text: "Approach him slowly", next: "slowlyApproachVictor" },
-      { text: "Sit down with him without a word", next: "sitAcrossVictor" },
+      { text: "Sit down with him without a word", next: "sitAcrossVictorCheck" },
       { text: "Go back", next: "goInsideTavern" }
     ]
   },
@@ -315,6 +320,37 @@ coinWellCheck: {
     ]
   },
 
+  sitAcrossVictorCheck: {
+  check: () => countItem("Chicken Eater Head") >= 5,
+  remove: { item: "Chicken Eater Head", amount: 5 },
+  success: "sitAcrossVictorSuccess",
+  fail: "sitAcrossVictor"
+},
+
+  sitAcrossVictorSuccess: {
+    text: "Wow. You actually did it. Good job. Here's a reward! Ready for your quest now?",
+    loot: ["Soldier Sword", "Gold Coin", "Gold Coin", "Gold Coin"],
+    choices: [
+      { text: "Ask him for the quest", next: "askVictorForNewQuest" },
+      { text: "Go back", next: "lookAtPeople" }
+    ]
+  },
+
+    askVictorForNewQuest: {
+    text: "Alright, ever heard of the manticore? Well, it's been ravaging farm lands across the empire. I want you to hunt it down and bring me back it's tail as as proof of your success. I'll have a very special reawrd for you...",
+    choices: [
+      { text: "Accept Quest", next: "acceptNewVictorQuest" },
+      { text: "Go back", next: "lookAtPeople" }
+    ]
+  },
+
+      acceptNewVictorQuest: {
+    text: "Good, I knew you wouldn't refuse.",
+    choices: [
+      { text: "Go back", next: "lookAtPeople" }
+    ]
+  },
+  
       sitAcrossVictor: {
     text: "I like your boldness. What do you want?",
     choices: [
@@ -390,6 +426,7 @@ coinWellCheck: {
     choices: [
       { text: "Talk to the lady", next: "talkToMary" },
       { text: "Talk to Farmer Bob", next: "talkToBob" },
+      { text: "Go to the field", next: "goField" },
       { text: "Go back", next: "exploreRoseTown" }
     ]
   },
@@ -430,7 +467,7 @@ coinWellCheck: {
     enemy: { 
   name: "Chicken Eater", 
   hp: 16, 
-  attack: 5,
+  attack: 2,
   returnTo: "goField",
   loot: [
   { item: "Chicken Eater Head", amount: 1 }
