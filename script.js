@@ -32,7 +32,9 @@ const player = {
   maxHp: 20,
   attack: 4,
   money: 3,
-  inventory: []
+  inventory: [],
+  currentQuest: null,
+  questProgress: {}
 };
 
 function countItem(itemName) {
@@ -289,11 +291,80 @@ coinWellCheck: {
   ]
 },
 
+      lookAtPeople: {
+    text: "You see a man sitting in the corner. What do you do?",
+    choices: [
+      { text: "Approach him slowly", next: "slowlyApproachVictor" },
+      { text: "Sit down with him without a word", next: "sitAcrossVictor" },
+      { text: "Go back", next: "goInsideTavern" }
+    ]
+  },
+
+      slowlyApproachVictor: {
+    text: "I don't waste time with cowards...",
+    choices: [
+      { text: "Go back", next: "lookAtPeople" }
+    ]
+  },
+
+      sitAcrossVictor: {
+    text: "I like your boldness. What do you want?",
+    choices: [
+      { text: "Ask him who he is", next: "askVictor" }
+      { text: "Go back", next: "lookAtPeople" }
+    ]
+  },
+
+      askVictor: {
+    text: "Who am I? I'm Victor, the quest man. Only the bravest come to me looking for challenges... but I think the question is, who are you?",
+    choices: [
+      { text: "Ask him for a quest", next: "askVictorForQuest" }
+      { text: "Go back", next: "lookAtPeople" }
+    ]
+  },
+
+      askVictorForQuest: {
+    text: "You want a quest, eh? I don't think you're quite ready for what I need done... but, I'll give you the chance to prove it. Ever heard of Chicked Eaters? And no, I don't mean foxes. Well, you'll find out soon enough what they are. Anyways, farmer Johan needs some help with them. If you can slay... let's say 5 of them, then I can give you a proper quest.",
+    choices: [
+      { text: "Accept the quest", next: "acceptChickenEaterQuest" }
+      { text: "Go back", next: "lookAtPeople" }
+    ]
+  },
+
+        acceptChickenEaterQuest: {
+    text: "Good, I knew you would accept.",
+    onEnter: () => {
+    player.currentQuest = {
+    id: "kill5ChickenEaters",
+    title: "Chicken Chaos",
+    description: "Kill 5 Chicken Eaters at Johans Farm in Rose Town.",
+    goal: 5,
+    completeScene: "chickenEaterComplete"
+};
+
+      player.questProgress["kill3Slimes"] = 0;
+},
+    choices: [
+      { text: "Go back", next: "lookAtPeople" }
+    ]
+  },
+
+  "chickenEaterComplete": {
+  text: "Viktor smirks as you return to the Red Rose. He knew he could've counted on you",
+  onEnter: () => {
+    player.currentQuest = null;
+  },
+  choices: [
+    { text: "Go back", next: "lookAtPeople" }
+  ]
+}
+
   
 }; // ← this closes the scenes object
 
 function renderScene() {
   const scene = scenes[currentScene];
+  if (scene.onEnter) scene.onEnter();
 if (scene.check) {
   const passed = scene.check();
 
@@ -329,6 +400,7 @@ if (scene.check) {
     });
     scene.loot = null; // prevent duplicate looting
     renderInventory();
+    renderQuestLog();
   }
 
   // Enemy handling
@@ -401,6 +473,18 @@ function updateCombatText() {
 
   function winCombat(enemy) {
     enemy.defeated = true;
+// Quest kill tracking
+if (player.currentQuest && enemy.questTag === player.currentQuest.id) {
+  const id = player.currentQuest.id;
+  player.questProgress[id]++;
+
+  if (player.questProgress[id] >= player.currentQuest.goal) {
+    const finish = player.currentQuest.completeScene;
+    currentScene = finish;
+    return renderScene();
+  }
+}
+
 
     giveEnemyLoot(enemy);
 
@@ -510,6 +594,30 @@ function renderInventory() {
   invDiv.innerHTML = html;
 }
 
+function renderQuestLog() {
+  const questDiv = document.getElementById("questLog");
+
+  if (!player.currentQuest) {
+    questDiv.innerHTML = "<b>Quest:</b> (none)";
+    return;
+  }
+
+let progressText = "";
+
+if (player.currentQuest.goal) {
+  const id = player.currentQuest.id;
+  const progress = player.questProgress[id] || 0;
+  progressText = `<br><b>Progress:</b> ${progress}/${player.currentQuest.goal}`;
+}
+
+questDiv.innerHTML = `
+  <b>Quest:</b><br>
+  ${player.currentQuest.title}<br>
+  <span style="color:gray;">${player.currentQuest.description}</span>
+  ${progressText}
+`;
+}
+
 function giveEnemyLoot(enemy) {
   if (!enemy.loot) return;
 
@@ -575,3 +683,4 @@ function getPlayerAttack() {
 }
 
 renderInventory();
+renderQuestLog();
