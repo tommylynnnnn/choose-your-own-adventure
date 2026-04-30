@@ -310,7 +310,7 @@ coinWellCheck: {
       sitAcrossVictor: {
     text: "I like your boldness. What do you want?",
     choices: [
-      { text: "Ask him who he is", next: "askVictor" }
+      { text: "Ask him who he is", next: "askVictor" },
       { text: "Go back", next: "lookAtPeople" }
     ]
   },
@@ -318,7 +318,7 @@ coinWellCheck: {
       askVictor: {
     text: "Who am I? I'm Victor, the quest man. Only the bravest come to me looking for challenges... but I think the question is, who are you?",
     choices: [
-      { text: "Ask him for a quest", next: "askVictorForQuest" }
+      { text: "Ask him for a quest", next: "askVictorForQuest" },
       { text: "Go back", next: "lookAtPeople" }
     ]
   },
@@ -326,7 +326,7 @@ coinWellCheck: {
       askVictorForQuest: {
     text: "You want a quest, eh? I don't think you're quite ready for what I need done... but, I'll give you the chance to prove it. Ever heard of Chicked Eaters? And no, I don't mean foxes. Well, you'll find out soon enough what they are. Anyways, farmer Johan needs some help with them. If you can slay... let's say 5 of them, then I can give you a proper quest.",
     choices: [
-      { text: "Accept the quest", next: "acceptChickenEaterQuest" }
+      { text: "Accept the quest", next: "acceptChickenEaterQuest" },
       { text: "Go back", next: "lookAtPeople" }
     ]
   },
