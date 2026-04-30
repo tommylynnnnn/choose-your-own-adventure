@@ -496,7 +496,7 @@ if (scene.check) {
     btn.innerText = choice.text;
 
     if (choice.combat) {
-      btn.onclick = () => startCombat(scene.enemy, currentScene);
+      btn.onclick = () => startCombat(structuredClone(scene.enemy), currentScene);
     } else {
       btn.onclick = () => {
         currentScene = choice.next;
