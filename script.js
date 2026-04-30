@@ -189,7 +189,7 @@ const scenes = {
   },
 
       jumpWellCheck: {
-  check: () => player.hp >= 1,
+  check: () => player.hp >= 25,
   success: "jumpWellSurvive",
   fail: "jumpWellDie"
 },
