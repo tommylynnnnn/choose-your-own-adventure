@@ -102,7 +102,7 @@ const scenes = {
   },
 
   enterVillageCheck: {
-  check: () => countItem("Pin of Shame (Rose Town)") >= 1,
+  check: () => countItem("Pin of Shame (George)") >= 1,
   success: "exploreRoseTown",
   fail: "enterVillage"
 },
@@ -294,9 +294,15 @@ coinWellCheck: {
     choices: [
       { text: "Go to the bar", next: "goBar" },
       { text: "Look around at the people", next: "lookAtPeople" },
-      { text: "Go back", next: "goTavern" }
+      { text: "Go back", next: "leaveTavernCheck" }
     ]
   },
+
+      leaveTavernCheck: {
+  check: () => countItem("Pin of Shame (John Smith)") >= 1,
+  success: "exploreRoseTown",
+  fail: "goTavern"
+},
 
          goBar: {
     text: "Working at the bar is a scrawny and oily looking man. He asks you what you want.",
