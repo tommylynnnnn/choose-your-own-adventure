@@ -26,9 +26,14 @@ const items = {
 },
 
   "Training Sword": {
-    type: "attack",
-    attack: 8
-  },
+  type: "attack",
+  attack: 8
+},
+
+  "Chicken Eater Head": {
+  type: "general",
+  description: "Disgusting and smells like feces."
+},
 
 };
 
@@ -416,6 +421,22 @@ coinWellCheck: {
     text: "Alrighty! Well, they're in the field! Good luck!",
     choices: [
       { text: "Go to the field", next: "goField" },
+      { text: "Go back", next: "goFarm" }
+    ]
+  },
+
+        goField: {
+    text: "You enter the fields. You see a Chicken Eater. They are large, green, and scaly. They have sharp fang-like teeth. They smell atrocious.",
+    enemy: { 
+  name: "Chicken Eater", 
+  hp: 16, 
+  attack: 5,
+  loot: [
+  { item: "Chicken Eater Head", amount: 1 }
+]
+},
+    choices: [
+      { text: "Attack", combat: true },
       { text: "Go back", next: "goFarm" }
     ]
   },
