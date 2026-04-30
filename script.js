@@ -23,7 +23,12 @@ const items = {
   "Beer": {
   type: "general",
   description: "A refreshing drink."
-}
+},
+
+  "Training Sword": {
+    type: "attack",
+    attack: 8
+  },
 
 };
 
@@ -330,9 +335,88 @@ coinWellCheck: {
   },
 
         acceptChickenEaterQuest: {
-    text: "Good, I knew you would accept.",
+    text: "Good. As proof of your quest, bring me back 5 Chicken Eater heads. You might need this to help you.",
+    loot: ["Training Sword"],
     choices: [
       { text: "Go back", next: "lookAtPeople" }
+    ]
+  },
+
+       goTownHall: {
+    text: "The Rose Town town hall is closed until the mayor is rescued.",
+    choices: [
+      { text: "Go back", next: "exploreRoseTown" }
+    ]
+  },
+
+       goMuseum: {
+    text: "Rose Town's museum was nice looking. It's doors were open.",
+    choices: [
+      { text: "Go inside", next: "goInsideMuseum" },
+      { text: "Go back", next: "exploreRoseTown" }
+    ]
+  },
+
+         goInsideMuseum: {
+    text: "Inside the museum, there was a funny looking man with a pointed moustache. He was an archaelogist",
+    choices: [
+      { text: "Talk to him", next: "talkHugo" },
+      { text: "Go back", next: "goMuseum" }
+    ]
+  },
+
+        talkHugo: {
+    text: "Oh perfect! You look like you could help! You see, my glorious museum has been burgled! That's right! BURGLED! The criminal may not be too far from Rose Town, can you go after them and retrieve my artifacts?",
+    choices: [
+      { text: "Accept Quest", next: "hugoThanksForAccepting" },
+      { text: "Go back", next: "goInsideMuseum" }
+    ]
+  },
+
+        hugoThanksForAccepting: {
+    text: "Oh! Thank you, Thank you, Thank you!!! Now remember, after you defeat the thief, you should be rewarded with the stolen artifacts. If you defeated the wrong thief, you won't get them!",
+    choices: [
+      { text: "Go back", next: "goInsideMuseum" }
+    ]
+  },
+
+        goFarm: {
+    text: "Rose Farm was big, very big. There was a large red barn, and an impressive field. By the barn there was a farmer, and by the tractor was a nervous looking lady.",
+    choices: [
+      { text: "Talk to the lady", next: "talkToMary" },
+      { text: "Talk to Farmer Bob", next: "talkToBob" },
+      { text: "Go back", next: "exploreRoseTown" }
+    ]
+  },
+
+        talkToBob: {
+    text: "Howdy! What brings you round these parts? Have you said hello to my wife Mary?",
+    choices: [
+      { text: "Go back", next: "goFarm" }
+    ]
+  },
+
+        talkToMary: {
+    text: "Oh thank goodness your here! Victor the quest giver came along and told me someone would come down and help! It's really the most dreaful situation!",
+    choices: [
+      { text: "Ask whats wrong", next: "askMary" },
+      { text: "Go back", next: "goFarm" }
+    ]
+  },
+
+        askMary: {
+    text: "Well, didn't you hear? The Chicken Eaters are terrorizing my poor chickens! Poor Clutterbuck didn't sleep a wink last night! Well you help?",
+    choices: [
+      { text: "Say yes", next: "sayYesToMary" },
+      { text: "Go back", next: "goFarm" }
+    ]
+  },
+
+        sayYesToMary: {
+    text: "Alrighty! Well, they're in the field! Good luck!",
+    choices: [
+      { text: "Go to the field", next: "goField" },
+      { text: "Go back", next: "goFarm" }
     ]
   },
 
