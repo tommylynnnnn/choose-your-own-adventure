@@ -1,1 +1,22 @@
+/* GLOBAL UI SCALE */
+body {
+  font-size: 22px; /* Increase all text */
+}
 
+.choice {
+  font-size: 22px; /* Make choice buttons bigger */
+  padding: 14px 20px; /* Make them chunkier */
+}
+
+#text {
+  font-size: 24px; /* Main story text bigger */
+  line-height: 1.5;
+}
+
+#inventory, #questLog {
+  font-size: 20px; /* Inventory + quest log bigger */
+}
+
+.choice:hover {
+  transform: scale(1.05);
+}
