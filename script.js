@@ -564,7 +564,7 @@ function updateCombatText() {
     cont.className = "choice";
     cont.innerText = "Continue";
     cont.onclick = () => {
-  currentScene = enemy.returnTo;
+  currentScene = scenes[currentScene].returnTo;
   renderScene();
 };
     choicesDiv.appendChild(cont);
