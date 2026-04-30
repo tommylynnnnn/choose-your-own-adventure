@@ -431,7 +431,7 @@ coinWellCheck: {
   name: "Chicken Eater", 
   hp: 16, 
   attack: 5,
-  returnTo: "goFarm",
+  returnTo: "goField",
   loot: [
   { item: "Chicken Eater Head", amount: 1 }
 ]
@@ -496,7 +496,7 @@ if (scene.check) {
     btn.innerText = choice.text;
 
     if (choice.combat) {
-      btn.onclick = () => startCombat(scene.enemy);
+      btn.onclick = () => startCombat(scene.enemy, currentScene);
     } else {
       btn.onclick = () => {
         currentScene = choice.next;
@@ -510,7 +510,7 @@ if (scene.check) {
 
 renderScene();
 
-function startCombat(enemy) {
+function startCombat(enemy, returnScene) {
   const textDiv = document.getElementById("text");
   const choicesDiv = document.getElementById("choices");
   let lastPlayerDamage = 0;
@@ -564,7 +564,7 @@ function updateCombatText() {
     cont.className = "choice";
     cont.innerText = "Continue";
     cont.onclick = () => {
-  currentScene = scenes[currentScene].returnTo;
+  currentScene = returnScene;
   renderScene();
 };
     choicesDiv.appendChild(cont);
