@@ -342,7 +342,7 @@ coinWellCheck: {
     completeScene: "chickenEaterComplete"
 };
 
-      player.questProgress["kill3Slimes"] = 0;
+      player.questProgress["kill5ChickenEaters"] = 0;
 },
     choices: [
       { text: "Go back", next: "lookAtPeople" }
